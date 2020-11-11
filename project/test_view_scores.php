@@ -17,7 +17,7 @@ if (isset($_GET["id"])) {
 $result = [];
 if (isset($id)) {
     $db = getDB();
-    $stmt = $db->prepare("SELECT score.id,user,score,created, user_id, Users.username FROM Scores as score JOIN Users on score.user_id = Users.id where score.id = :id");
+    $stmt = $db->prepare("SELECT score.id,username,score,score.created, user_id, Users.username FROM Scores as score JOIN Users on score.user_id = Users.id where score.id = :id");
     $r = $stmt->execute([":id" => $id]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$result) {
@@ -29,7 +29,7 @@ if (isset($id)) {
 <?php if (isset($result) && !empty($result)): ?>
     <div class="card">
         <div class="card-title">
-            <?php safer_echo($result["user"]); ?>
+            <?php safer_echo($result["username"]); ?>
         </div>
         <div class="card-body">
             <div>

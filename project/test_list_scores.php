@@ -14,13 +14,13 @@ if (isset($_POST["query"])) {
 }
 if (isset($_POST["search"]) && !empty($query)) {
     $db = getDB();
-    $stmt = $db->prepare("SELECT id,user,score,created,user_id from Scores JOIN Users on Scores.user_id = Users.id WHERE username like :q LIMIT 10");
+    $stmt = $db->prepare("SELECT Scores.id,username,score,Scores.created,user_id from Scores JOIN Users on Scores.user_id = Users.id WHERE username like :q LIMIT 10");
     $r = $stmt->execute([":q" => "%$query%"]);
     if ($r) {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     else {
-        flash("There was a problem fetching the results");
+        flash("There was a problem fetching the results " . var_export($stmt->errorInfo(), true));
     }
 }
 ?>
@@ -35,11 +35,11 @@ if (isset($_POST["search"]) && !empty($query)) {
                 <div class="list-group-item">
                     <div>
                         <div>User:</div>
-                        <div><?php safer_echo($r["user"]); ?></div>
+                        <div><?php safer_echo($r["username"]); ?></div>
                     </div>
                     <div>
                         <div>Score:</div>
-                        <div><?php getState($r["score"]); ?></div>
+                        <div><?php safer_echo($r["score"]); ?></div>
                     </div>
                     <div>
                         <div>Created:</div>
@@ -60,3 +60,4 @@ if (isset($_POST["search"]) && !empty($query)) {
         <p>No results</p>
     <?php endif; ?>
 </div>
+<?php require(__DIR__ . "/partials/flash.php");

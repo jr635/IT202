@@ -46,22 +46,22 @@ $result = [];
 if (isset($id)) {
     $id = $_GET["id"];
     $db = getDB();
-    $stmt = $db->prepare("SELECT * FROM PointsHisotry where id = :id");
+    $stmt = $db->prepare("SELECT * FROM PointsHistory as ph JOIN Users on ph.user_id = Users.id WHERE id = :id");
     $r = $stmt->execute([":id" => $id]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 }
-//get score for dropdown
+//get scores for dropdown
 $db = getDB();
 $stmt = $db->prepare("SELECT id from Scores LIMIT 10");
 $r = $stmt->execute();
-$soores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-    <h3>Edit Points History</h3>
+<h3>Edit Points History</h3>
     <form method="POST">
-	<label>User</label>
-	<input name="user" placeholder="User" value="<php echo $result["user"]; ?>"/>
+        <label>User</label>
+        <input name="user" placeholder="User" value="<?php echo $result["username"]; ?>"/>
         <label>Score</label>
-        <input name="score" placeholder="Score" value="<?php echo $result["score"]; ?>"/>
+        <select name="score" value="<?php echo $result["score"];?>" >
             <option value="-1">None</option>
             <?php foreach ($scores as $score): ?>
                 <option value="<?php safer_echo($score["id"]); ?>" <?php echo ($result["user_id"] == $score["id"] ? 'selected="selected"' : ''); ?>
@@ -70,10 +70,8 @@ $soores = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </select>
         <label>Points Change</label>
         <input type="number" min="1" name="points_change" value="<?php echo $result["points_change"]; ?>"/>
-	<label>Reason</label>
-	<input name="reason" placeholder="Reason" value="<php echo $result["reason"]; ?>"/>
+        <label>Reason</label>
+        <input name="reason" placeholder="Reason" value="<?php echo $result["reason"]; ?>"/>
         <input type="submit" name="save" value="Update"/>
     </form>
-
-
 <?php require(__DIR__ . "/partials/flash.php");

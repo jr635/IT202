@@ -26,7 +26,7 @@ if (isset($id)) {
     }
 }
 ?>
-    <h3>View Incubator</h3>
+    <h3>View Points Changed</h3>
 <?php if (isset($result) && !empty($result)): ?>
     <div class="card">
         <div class="card-title">
