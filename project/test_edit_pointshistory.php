@@ -46,7 +46,7 @@ $result = [];
 if (isset($id)) {
     $id = $_GET["id"];
     $db = getDB();
-    $stmt = $db->prepare("SELECT ph.id,points_change,username,reason FROM PointsHistory as ph JOIN Users on ph.user_id = Users.id WHERE id = :id");
+    $stmt = $db->prepare("SELECT ph.id,points_change,username,reason FROM PointsHistory as ph JOIN Users on ph.user_id = Users.id WHERE ph.id = :id");
     $r = $stmt->execute([":id" => $id]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -59,7 +59,7 @@ $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <h3>Edit Points History</h3>
     <form method="POST">
         <label>User</label>
-        <input name="user" placeholder="User" value="<?php echo $result["username"]; ?>"/>
+        <input name="username" placeholder="User" value="<?php echo $result["username"]; ?>"/>
         <label>Score</label>
         <select name="score" value="<?php echo $result["score"];?>" >
             <option value="-1">None</option>

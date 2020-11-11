@@ -17,8 +17,8 @@ if (isset($_GET["id"])) {
 $result = [];
 if (isset($id)) {
     $db = getDB();
-    $stmt = $db->prepare("SELECT ph.*, Users.username from PointsHistory as ph JOIN Users on ph.user_id = Users.id WHERE Users.username like :q LIMIT 10");
-    $r = $stmt->execute([":id" => $id]);
+    $stmt = $db->prepare("SELECT ph.*, Users.username from PointsHistory as ph JOIN Users on ph.user_id = Users.id WHERE ph.id = $id  like :q LIMIT 10");
+    $r = $stmt->execute([":q" => $id]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$result) {
         $e = $stmt->errorInfo();
@@ -30,14 +30,13 @@ if (isset($id)) {
 <?php if (isset($result) && !empty($result)): ?>
     <div class="card">
         <div class="card-title">
-            <?php safer_echo($result["user"]); ?>
+            <?php safer_echo($result["username"]); ?>
         </div>
         <div class="card-body">
             <div>
                 <p>Stats</p>
                 <div>Points Change: <?php safer_echo($result["points_change"]); ?></div>
-                <div>Reason: <?php safer_echo($result("reason")); ?></div>
-                <div>Score: <?php safer_echo($result["score"]); ?></div>
+                <div>Reason: <?php safer_echo($result["reason"]); ?></div>
             </div>
         </div>
     </div>
