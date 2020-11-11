@@ -46,7 +46,7 @@ $result = [];
 if (isset($id)) {
     $id = $_GET["id"];
     $db = getDB();
-    $stmt = $db->prepare("SELECT * FROM PointsHistory as ph JOIN Users on ph.user_id = Users.id WHERE id = :id");
+    $stmt = $db->prepare("SELECT ph.id,points_change,username,reason FROM PointsHistory as ph JOIN Users on ph.user_id = Users.id WHERE id = :id");
     $r = $stmt->execute([":id" => $id]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 }
