@@ -121,9 +121,9 @@ if (isset($_GET["id"])) {
 $result = [];
 if (isset($id)) {
     $db = getDB();
-    $stmt = $db->prepare("SELECT score.id,username,score,score.created, user_id, Users.username FROM Scores as score JOIN Users on score.user_id = Users.id where score.id = :id");
+    $stmt = $db->prepare("SELECT score from Scores where user_id = :id LIMIT 10");
     $r = $stmt->execute([":id" => $id]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if (!$result) {
         $e = $stmt->errorInfo();
         flash($e[2]);
@@ -132,16 +132,13 @@ if (isset($id)) {
 ?>
 <?php if (isset($result) && !empty($result)): ?>
     <div class="card">
-        <div class="card-title">
-            <?php safer_echo($result["username"]); ?>
-        </div>
         <div class="card-body">
             <div>
-                <p>Stats</p>
-                <div>Score: <?php safer_echo($result["score"]); ?></div>
-                <div>Created: <?php safer_echo($result["created"]); ?></div>
-                <div>Owned by: <?php safer_echo($result["username"]); ?></div>
-            </div>
+                <p>Last 10 Scores</p>
+		<?php foreach ($result as $r): ?>
+                <div>Score: <?php safer_echo($r["score"]); ?></div>
+	 	<?php endforeach; ?>
+	   </div>
         </div>
     </div>
 <?php else: ?>
@@ -149,6 +146,7 @@ if (isset($id)) {
 <?php endif; ?>
 
     <form method="POST">
+	<br>
         <label for="email">Email</label>
         <input type="email" name="email" value="<?php safer_echo(get_email()); ?>"/>
         <label for="username">Username</label>
