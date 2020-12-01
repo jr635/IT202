@@ -3,12 +3,22 @@ if(!isset($type)){
     flash("Type variable is not set");
 }
 
+$currentdate = date("Y-m-d H:i:s");
+$weekagodate = date("Y-m-d H:i:s", strtotime($currentdate.'- 7 days'));
+$monthagodate = date("Y-m-d H:i:s", strtotime($currentdate.'- 30 days'));
+
+$params = [];
+
 switch($type){
      case "weekly":
-	 $query = "SELECT score.id,username,score.created,score FROM Scores as score JOIN Users on score.user_id = Users.id WHERE BETWEEN (Timestamp()-(3600*24*7)) AND Timestamp() ORDER by score DESC, score.created ASC LIMIT 10";
+	 $params[":currentdate"] = $currentdate;
+	 $params[":weekagodate"] = $weekagodate;
+	 $query = "SELECT score.id,username,score.created,score FROM Scores as score JOIN Users on score.user_id = Users.id WHERE score.created BETWEEN :weekagodate AND :currentdate ORDER by score DESC, score.created ASC LIMIT 10";
      break; 
      case "monthly":
-	 $query = "SELECT score.id,username,score.created,score FROM Scores as score JOIN Users on score.user_id = Users.id WHERE BETWEEN (Timestamp()-(3600*24*30)) AND Timestamp() ORDER by score DESC, score.created ASC LIMIT 10";
+	 $params[":currentdate"] = $currentdate;
+	 $params[":monthagodate"] = $monthagodate;
+	 $query = "SELECT score.id,username,score.created,score FROM Scores as score JOIN Users on score.user_id = Users.id WHERE score.created BETWEEN :monthagodate AND :currentdate ORDER by score DESC, score.created ASC LIMIT 10";
      break;
      case "lifetime":
 	 $query = "SELECT score.id,username,score.created,score FROM Scores as score JOIN Users on score.user_id = Users.id ORDER by score DESC, score.created ASC LIMIT 10";
@@ -21,7 +31,7 @@ switch($type){
 if(isset($query)){
      $db = getDB();
      $stmt = $db->prepare($query);
-     $stmt->execute();
+     $stmt->execute($params);
      $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
      $stmt->errorInfo();
      if(!$scores){

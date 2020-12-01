@@ -47,10 +47,6 @@ function safer_echo($var) {
     echo htmlspecialchars($var, ENT_QUOTES, "UTF-8");
 }
 
-//Timestamp
-function Timestamp(){
-        date("Y-m-d H:i:s");
-}
 
 //for flash feature
 function flash($msg) {
