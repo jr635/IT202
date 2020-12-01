@@ -5,10 +5,10 @@ if(!isset($type)){
 
 switch($type){
      case "weekly":
-	 $query = "SELECT score.id,username,score.created,score FROM Scores as score JOIN Users on score.user_id = Users.id AND BETWEEN (Timestamp()-(3600*24*7)) AND Timestamp() ORDER by score DESC, score.created ASC LIMIT 10";
+	 $query = "SELECT score.id,username,score.created,score FROM Scores as score JOIN Users on score.user_id = Users.id WHERE BETWEEN (Timestamp()-(3600*24*7)) AND Timestamp() ORDER by score DESC, score.created ASC LIMIT 10";
      break; 
      case "monthly":
-	 $query = "SELECT score.id,username,score.created,score FROM Scores as score JOIN Users on score.user_id = Users.id AND BETWEEN (Timestamp()-(3600*24*30)) AND Timestamp() ORDER by score DESC, score.created ASC LIMIT 10";
+	 $query = "SELECT score.id,username,score.created,score FROM Scores as score JOIN Users on score.user_id = Users.id WHERE BETWEEN (Timestamp()-(3600*24*30)) AND Timestamp() ORDER by score DESC, score.created ASC LIMIT 10";
      break;
      case "lifetime":
 	 $query = "SELECT score.id,username,score.created,score FROM Scores as score JOIN Users on score.user_id = Users.id ORDER by score DESC, score.created ASC LIMIT 10";
@@ -24,7 +24,7 @@ if(isset($query)){
      $stmt->execute();
      $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
      $stmt->errorInfo();
-     if(!scores){
+     if(!$scores){
 	$e = $stmt->errorInfo();
 	flash($e[2]);
 }
