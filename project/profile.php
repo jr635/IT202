@@ -111,6 +111,7 @@ if (isset($_POST["saved"])) {
 
 <?php
 //we'll put this at the top so both php block have access to it
+$id = get_user_id();
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
 }
