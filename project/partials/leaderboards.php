@@ -23,8 +23,12 @@ if(isset($query)){
      $stmt = $db->prepare($query);
      $stmt->execute();
      $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+     $stmt->errorInfo();
+     if(!scores){
+	$e = $stmt->errorInfo();
+	flash($e[2]);
 }
-
+}
 ?>
 
 <?php if (isset($scores) && !empty($scores)): ?>
