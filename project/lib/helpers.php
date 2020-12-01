@@ -47,6 +47,7 @@ function safer_echo($var) {
     echo htmlspecialchars($var, ENT_QUOTES, "UTF-8");
 }
 
+
 //for flash feature
 function flash($msg) {
     if (isset($_SESSION['flash'])) {
