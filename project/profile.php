@@ -110,14 +110,40 @@ if (isset($_POST["saved"])) {
 ?>
 
 <?php
-//we'll put this at the top so both php block have access to it
 $id = get_user_id();
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
 }
 ?>
+
 <?php
-//fetching
+$result = [];
+if (isset($id)) {
+    $db = getDB();
+    $stmt = $db->prepare("SELECT points from Users where id = :id");
+    $r = $stmt->execute([":id" => $id]);
+    $result = $stmt->fetchALL(PDO::FETCH_ASSOC);
+    if (!$result) {
+        $e = $stmt->errorInfo();
+        flash($e[2]);
+    }
+}
+?>
+
+<?php if (isset($result) && !empty($result)): ?>
+    <div class="card">
+        <div class="card-body">
+            <div>
+                <p>Personal Points : </p>
+                <div>Score: <?php safer_echo($r["points"]); ?></div>
+           </div>
+        </div>
+    </div>
+<?php else: ?>
+ <p>How are there no points here, you literally start with 0 points</p>
+<?php endif; ?>
+
+<?php
 $result = [];
 if (isset($id)) {
     $db = getDB();
