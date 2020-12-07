@@ -19,6 +19,9 @@ require_once(__DIR__ . "/../lib/helpers.php");
 	    <li><a href="pong.html">Pong</a></li>
     	    <li><a href="test_list_scores.php">View Scores</a></li>
 	    <li><a href="test_list_pointshistory.php">View Points History</a></li>
+	    <li><a href="create_competition.php">Create A Competition</a></li>
+	    <li><a href="competitions.php">All Competitions</a></li>
+	    <li><a href="my_competitions.php">My Competitions</a></li>
             <li><a href="logout.php">Logout</a></li>
         <?php endif; ?>
     </ul>
