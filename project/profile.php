@@ -122,7 +122,7 @@ if (isset($id)) {
     $db = getDB();
     $stmt = $db->prepare("SELECT points from Users where id = :id");
     $r = $stmt->execute([":id" => $id]);
-    $result = $stmt->fetchALL(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$result) {
         $e = $stmt->errorInfo();
         flash($e[2]);
@@ -134,8 +134,8 @@ if (isset($id)) {
     <div class="card">
         <div class="card-body">
             <div>
-                <p>Personal Points : </p>
-                <div>Score: <?php safer_echo($r["points"]); ?></div>
+		</br>
+                <div> Personal Points: <?php safer_echo($result["points"]); ?></div>
            </div>
         </div>
     </div>
