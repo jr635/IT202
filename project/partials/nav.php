@@ -7,6 +7,7 @@ require_once(__DIR__ . "/../lib/helpers.php");
     <ul class="nav">
         <li><a href="home.php">Home</a></li>
         <?php if (!is_logged_in()): ?>
+	    <li><a href="pongloggedout.html">Pong</a></li>
             <li><a href="login.php">Login</a></li>
             <li><a href="register.php">Register</a></li>
         <?php endif; ?>
@@ -21,6 +22,7 @@ require_once(__DIR__ . "/../lib/helpers.php");
 	    <li><a href="test_list_pointshistory.php">View Points History</a></li>
 	    <li><a href="create_competition.php">Create A Competition</a></li>
 	    <li><a href="competitions.php">All Competitions</a></li>
+	    <li><a href="competitionhist.php">History Of Competitions</a></li>
 	    <li><a href="my_competitions.php">My Competitions</a></li>
             <li><a href="logout.php">Logout</a></li>
         <?php endif; ?>
