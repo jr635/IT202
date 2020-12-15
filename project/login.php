@@ -6,6 +6,8 @@
         <input type="password" id="p1" name="password" required/>
         <input type="submit" name="login" value="Login"/>
     </form>
+   <div>
+	<a type="button" href="passwordreset.php"> Forgotten Password </a>
 
 <?php
 if (isset($_POST["login"])) {
