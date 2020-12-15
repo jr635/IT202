@@ -85,4 +85,28 @@ function getBalance(){
 	return 0;
 }
 
+function Top3(){
+	if(isset($_GET["id"])){
+		$id = $_GET["id"];
+	}
+	$params = [];
+
+	if(isset($id)){
+	     $db = getDB();
+    	     $stmt = $db->prepare("SELECT id, participants, min_score, first_place_per, second_place_per, third_place_per, reward, name, created, expires from F20_Competitions WHERE expires < current_timestamp and paid_out = 0");
+    	     $stmt->execute([":id" => $id]);
+    	     $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    	     if(!$params){
+       		 $e = $stmt->errorInfo();
+       		 flash($e[2]);
+		}
+
+	foreach($params as $index=>$t){
+		if($index > 0) {
+			$query .= ",";
+		}
+		$query .= "?";
+		$params[$index] = $t["id];
+
+}
 ?>
