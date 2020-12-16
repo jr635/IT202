@@ -64,8 +64,9 @@ if (isset($_POST["saved"])) {
         }
     }
     if ($isValid) {
-        $stmt = $db->prepare("UPDATE Users set email = :email, username= :username where id = :id");
-        $r = $stmt->execute([":email" => $newEmail, ":username" => $newUsername, ":id" => get_user_id()]);
+	$privte = $_POST("private");
+        $stmt = $db->prepare("UPDATE Users set email = :email, username= :username, privte = :privte  where id = :id");
+        $r = $stmt->execute([":email" => $newEmail, ":username" => $newUsername, ":privte" => $privte, ":id" => get_user_id()]);
         if ($r) {
             flash("Updated profile");
         }
@@ -144,6 +145,21 @@ if (isset($id)) {
 <?php endif; ?>
 
 <?php
+$result = [];
+if (isset($id)){
+	$db = getDB();
+	$stmt = $db->prepare("SELECT privte from Users where id = :id:");
+	$r = $stmt->execute([":id" => $id]);
+	$result = $stmt->fetch(PDO::FETCH_ASSOC);
+	if (!$result){
+		$e = $stmt->errorInfo();
+		flash($e[2]);
+	}
+}
+
+$privte = $result["private"];
+?>
+<?php
 if (!is_logged_in()) {
     //this will redirect to login and kill the rest of this script (prevent it from executing)
     flash("You must be logged in to access this page");
@@ -180,6 +196,7 @@ if($e[0] != "00000"){
     flash(var_export($e, true), "alert");
 }
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
     <div class="container-fluid">
     <h3>My Last 10 Scores</h3>
@@ -233,6 +250,8 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <input type="password" name="password"/>
         <label for="cpw">Confirm Password</label>
         <input type="password" name="confirm"/>
+	<label for="priv"> 0 For Public Profile, 1 For Private Profile</label>
+	<input type="number" name="private"/>
         <input type="submit" name="saved" value="Save Profile"/>
     </form>
 <?php require(__DIR__ . "/partials/flash.php");
