@@ -1,3 +1,3 @@
 ALTER TABLE Users
-	ADD COLUMN private int default 0;
+	ADD COLUMN privte int default 0;
 
