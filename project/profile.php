@@ -64,8 +64,8 @@ if (isset($_POST["saved"])) {
         }
     }
     if ($isValid) {
-	$privte = $_POST("private");
-        $stmt = $db->prepare("UPDATE Users set email = :email, username= :username, privte = :privte  where id = :id");
+	$privte = $_POST["privte"];
+        $stmt = $db->prepare("UPDATE Users set email = :email, username= :username, privte = :privte where id = :id");
         $r = $stmt->execute([":email" => $newEmail, ":username" => $newUsername, ":privte" => $privte, ":id" => get_user_id()]);
         if ($r) {
             flash("Updated profile");
@@ -148,7 +148,7 @@ if (isset($id)) {
 $result = [];
 if (isset($id)){
 	$db = getDB();
-	$stmt = $db->prepare("SELECT privte from Users where id = :id:");
+	$stmt = $db->prepare("SELECT privte from Users where id = :id");
 	$r = $stmt->execute([":id" => $id]);
 	$result = $stmt->fetch(PDO::FETCH_ASSOC);
 	if (!$result){
@@ -156,8 +156,14 @@ if (isset($id)){
 		flash($e[2]);
 	}
 }
+$privte = $result["privte"];
+?>
 
-$privte = $result["private"];
+<?php
+ if($privte == 1){
+ }
+ if($privte == 0){
+ }
 ?>
 <?php
 if (!is_logged_in()) {
@@ -250,8 +256,8 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <input type="password" name="password"/>
         <label for="cpw">Confirm Password</label>
         <input type="password" name="confirm"/>
-	<label for="priv"> 0 For Public Profile, 1 For Private Profile</label>
-	<input type="number" name="private"/>
+	<label for="privte"> 0 For Public Profile, 1 For Private Profile</label>
+	<input type="privte" name="privte"/>
         <input type="submit" name="saved" value="Save Profile"/>
     </form>
 <?php require(__DIR__ . "/partials/flash.php");
